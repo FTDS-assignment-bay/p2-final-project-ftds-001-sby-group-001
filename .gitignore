@@ -11,3 +11,5 @@
 # Includelist folder
 # !images/
 Telco-Customer-Churn.xls
+CustomerChurnDetection-ANN.ipynb
+deep_learning.ipynb
