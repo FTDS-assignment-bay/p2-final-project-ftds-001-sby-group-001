@@ -1,0 +1,11 @@
+name,gender,senior_citizen,partner,dependents,tenure,phone_service,multiple_lines,internet_service,online_security,online_backup,device_protection,tech_support,streaming_tv,streaming_movies,contract,paperless_billing,payment_method,monthly_charges,total_charges,monthly_charges_cat,tenure_year
+Aditya Jusuf,Male,No,Yes,Yes,67,Yes,No,Fiber optic,No,Yes,Yes,Yes,Yes,Yes,Two year,No,Bank transfer (automatic),103.15,6895.5,High Expense,6
+Yuliana Rahma,Female,No,Yes,No,26,Yes,No,DSL,No,Yes,No,Yes,Yes,Yes,Month-to-month,Yes,Electronic check,73.05,1959.5,Medium High Expense,3
+Hadi Faisal,Male,No,No,No,1,Yes,No,Fiber optic,No,No,No,No,No,No,Month-to-month,Yes,Electronic check,69.9,69.9,Medium High Expense,1
+Edi Burhanuddin,Male,No,No,No,3,Yes,No,Fiber optic,Yes,No,No,No,No,Yes,Month-to-month,Yes,Mailed check,86.05,244.85,Medium High Expense,1
+Vina Trianna,Female,Yes,No,No,6,Yes,Yes,Fiber optic,No,Yes,No,No,Yes,Yes,Month-to-month,Yes,Electronic check,98.25,560.6,High Expense,1
+Irfan Agung,Male,No,No,No,2,Yes,No,Fiber optic,No,No,No,No,No,No,Month-to-month,No,Mailed check,70.7,129.2,Medium High Expense,1
+Dwi Purnama,Female,No,Yes,Yes,65,Yes,Yes,DSL,Yes,Yes,No,Yes,Yes,Yes,Two year,Yes,Bank transfer (automatic),82.5,5215.1,Medium High Expense,6
+Siti Aisyah,Female,No,No,No,1,Yes,Yes,Fiber optic,No,No,No,No,Yes,Yes,Month-to-month,Yes,Electronic check,94.6,94.6,High Expense,1
+Putri Widya,Female,No,Yes,No,61,Yes,Yes,No,No internet service,No internet service,No internet service,No internet service,No internet service,No internet service,Two year,No,Mailed check,24.4,1417.9,Low Expense,6
+Annisa Kinasih,Female,No,No,No,36,Yes,Yes,DSL,Yes,No,Yes,Yes,Yes,Yes,One year,Yes,Credit card (automatic),89.65,3348.1,Medium High Expense,3
