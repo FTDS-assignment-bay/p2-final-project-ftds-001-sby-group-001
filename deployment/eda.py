@@ -21,13 +21,12 @@ def run():
     # Plot 1
     def plot_1():
         st.write('#### Pie Chart for Customer Status Distribution')
-        target = df["churn"].value_counts().reset_index()
-        persen = df["churn"].value_counts(normalize=True).reset_index()
-        target["percentage"] = persen["churn"]
+        target = df.groupby(['churn']).agg(total_churn=('churn', 'count'))
+        target['percentage'] = (target['total_churn'] / target['total_churn'].sum())
         
         fig_1 = plt.figure()
         fig_1, ax = plt.subplots(ncols=1, figsize=(5, 5))
-        ax.pie(target["percentage"], labels = target["index"], autopct='%.0f%%')
+        ax.pie(target["percentage"], labels=target["percentage"].index, autopct='%.0f%%')
         ax.set_title("Customer Status Distribution")
         st.pyplot(fig_1)
         st.write('''
