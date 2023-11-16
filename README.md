@@ -22,15 +22,9 @@ The primary goal of this project is to analyze and understand the factors contri
 - `images/` : Folder containing data visualization and analysis result.
 
 ## Exploratory Data Analysis
-To achieve the .... goals ....
-
-### EDA Title 01
 ---
-![EDA Title 01](./images/example.png)
+![EDA Title 01](./images/graph.png)
 
-### EDA Title 02
----
-![EDA Title 02](./images/example.png)
 
 ## Conclusion
 Based on the Exploratory Data Analysis we found 3 cluster of customer churn. All three clusters show similarities in having a short average tenure, indicating a trend for customers to end service relatively quickly. Fiber optic internet service was a common factor among the clusters, indicating that this service may have issues that lead to customer dissatisfaction.
