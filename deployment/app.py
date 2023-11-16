@@ -17,13 +17,11 @@ from PIL import Image
 
 # Create sidebar navigation
 
-## Churn Guardian, Yosef Project
-
 # st.markdown(
 #     f"""
 #     <style>
 #         [data-testid="stSidebar"] {{
-#             background-image: url(https://raw.githubusercontent.com/FTDS-assignment-bay/FTDS-007-HCK-group-002/main/assets/ChurnGuardian-Logo-Transparants.png);
+#             background-image: url(https://raw.githubusercontent.com/FTDS-assignment-bay/main/assets/ChurnGuardian-Logo-Transparants.png);
 #             background-repeat: no-repeat;
 #             padding-top: 20px;
 #             background-position: 10px 50px;
@@ -33,9 +31,6 @@ from PIL import Image
 #     """,
 #     unsafe_allow_html=True,
 # )
-
-# selected_page = st.sidebar.radio('Select Page', ('📋 Home Page', '📊 Exploratory Data Analysis', '💻 Model'))
-## Churn Guardian, Yosef Project
 
 st.set_page_config(
     page_title='Telco Customer Churn and Segmentation', 
@@ -57,7 +52,7 @@ selected = option_menu(None, ["About", "EDA", "Predict"],
     menu_icon="cast", default_index=0, orientation="horizontal",
     styles={
         "icon": {"color": "orange", "font-size": "15px"}, 
-        "nav-link": {"font-size": "15px", "text-align": "left", "margin":"1px", "--hover-color": "#eee"},
+        "nav-link": {"font-size": "15px", "text-align": "left", "margin":"1px", "--hover-color": "#eee"}, 
         "nav-link-selected": {"background-color": "grey"},
     }
 )   

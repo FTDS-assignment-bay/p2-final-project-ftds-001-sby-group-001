@@ -28,12 +28,14 @@ def run():
 
     # Choice of input: Upload or Manual Input
     inputType = st.selectbox("How would you like to input data ?", ["Upload Excel or CSV File", "Manual Input"])
+    st.markdown('---')
 
     # Create Function for Prediction
     def predictData(df):
         # Classification prediction
         y_pred_uploaded = classification_model.predict(df)
         df['churn'] = y_pred_uploaded
+        # st.dataframe(df)
 
         # Filter the DataFrame for Predicted Churn (1) 
         df_churn = df[df['churn'] == 1]
@@ -70,41 +72,65 @@ def run():
             df_cluster_1 = df_churn[df_churn['cluster'] == 1]
             df_cluster_2 = df_churn[df_churn['cluster'] == 2]
 
-            st.write('## Result')
-            st.write('##### Here are some suggestion to minimalize churn potential for each customer')
+            st.write(f'## Result : `{churnCustomer} customer` are predicted as churn!')
+            st.write('##### Here are some suggestion to minimalize churn potential for each customer depend on their cluster')
             c0, c1, c2 = '', '', ''
             for x in df_cluster_0['name']: c0 += str(x) + ', '
             for y in df_cluster_1['name']: c1 += str(y) + ', '
             for z in df_cluster_2['name']: c2 += str(z) + ', '
             
+            cluster_0 = '''
+                - Most of them are senior citizen
+                - Having partner and dependents
+                - High monthly charges
+            '''
+
             suggestion_0 = '''
-                - Menawarkan paket dengan tambahan kecepatan selama 3 bulan bagi yang telah berlangganan di atas 3 tahun
-                - Membuka seluruh channel TV saat event hari besar seperti lebaran, natal dan lain lain
-                - Memberikan penawaran khusus untuk meningkatkan kecepatan internet kepada mereka
+                - Offers packages with additional speed for 3 months for those who have subscribed for more than 3 years
+                - Open all TV channels during big holiday events such as Eid, Christmas and others
+                - Provide special offers to increase internet speed to them
+            '''
+
+            cluster_1 = '''
+                - Mix of senior citizan and youngster
+                - Having partner and dependents
+                - Low monthly charges
             '''
 
             suggestion_1 = '''
-                - Memberikan penawaran dengan banyak keuntungan jika berlangganan untuk jangka panjang 
-                - Menawarkan paket internet DSL tahunan dengan harga yang terjangkau
+                - Provides offers with many benefits if they subscribe for the long term
+                - Offers annual DSL internet packages at affordable prices
+            '''
+
+            cluster_2 = '''
+                - Most of them are young people
+                - Most of them have no partner and dependents
+                - Moderate monthly charges
             '''
 
             suggestion_2 = '''
-                Memberikan paket khusus dengan kriteria sebagai berikut :
-                - Kecepatan tinggi tetapi banwidth lebih rendah dengan harga yang lebih murah dari paket normal
-                - Kecepatan rendah tetapi banwidth besar sehingga koneksi jauh lebih stabil dengan harga yang lebih murah dari paket normal
+                Providing special packages with the following criteria:
+                 - High speed internet but lower bandwidth at a cheaper price than normal packages
+                 - Low speed internet but large bandwidth so the connection is much more stable at a cheaper price than normal packages
             '''
 
             if c0 != '':
+                st.write('##### Cluster 1')
+                st.write(cluster_0)
                 st.write('Suggestion for `', c0[0:-2], '` is')
                 st.write(suggestion_0)
                 st.markdown('---')
             
             if c1 != '':
+                st.write('##### Cluster 2')
+                st.write(cluster_1)
                 st.write('Suggestion for `', c1[0:-2], '` is')
                 st.write(suggestion_1)
                 st.markdown('---')
             
             if c2 != '':
+                st.write('##### Cluster 3')
+                st.write(cluster_2)
                 st.write('Suggestion for `', c2[0:-2], '` is')
                 st.write(suggestion_2)
                 st.markdown('---')
@@ -129,7 +155,15 @@ def run():
 
     # A. For CSV
     if inputType == "Upload Excel or CSV File":
-        uploaded_file = st.file_uploader("Choose a Excel or CSV file", type=["csv", "xlsx"], accept_multiple_files=False)
+        with open('telco_data_test.xlsx', 'rb') as file:
+            st.download_button(
+                label='💾 Download Template Excel',
+                data=file,
+                file_name='telco_example.xlsx',
+                mime='application/vnd.ms-excel'
+            )
+
+        uploaded_file = st.file_uploader("Choose Excel or CSV file", type=["csv", "xlsx"], accept_multiple_files=False)
         if uploaded_file is not None:
             split_file_name = os.path.splitext(uploaded_file.name)
             # file_name = split_file_name[0]
@@ -163,7 +197,7 @@ def run():
         # internet_service =  col4.selectbox('Internet Service', ('DSL', 'Fiber optic', 'No'), index=0)
 
         col4, col5, col6 = st.columns([1, 1, 1])
-        internet_service =  col4.radio(label='Subs for Phone service?', options=['DSL', 'Fiber optic', 'No'])
+        internet_service =  col4.radio(label='Subs for Internet service?', options=['DSL', 'Fiber optic', 'No'])
         phone_service = col5.radio(label='Subs for Phone service?', options=['Yes', 'No'])
         multiple_lines = col6.radio(label='Subs for Multiple Lines?', options=['Yes', 'No', 'No Phone Services'])
 
@@ -183,7 +217,7 @@ def run():
         col_charges1, col_charges2, col_charges3 = st.columns([1, 1, 2])
         monthly_charges =  col_charges1.number_input('Monthly Charges', min_value=1, max_value=999, step=1, help='Amount to paid per month', key='mcharges', on_change=calculateChargesAndCategory)
         total_charges = col_charges2.number_input('Total Charges', min_value=1, max_value=999999, step=1, disabled=True, key='tcharges')
-        charges_cat = col_charges3.text_input('Chargest Category', disabled=True, key='catcharges')
+        charges_cat = col_charges3.text_input('Charges Category', disabled=True, key='catcharges')
 
         # st.button('Predict', on_click=predict)
         data_inf = {
@@ -192,7 +226,7 @@ def run():
             'senior_citizen': senior_citizen, 
             'partner': partner, 
             'dependents': dependents, 
-            'tenure': int(tenure), 
+            'tenure': tenure, 
             'phone_service': phone_service, 
             'multiple_lines': multiple_lines, 
             'internet_service': internet_service, 
@@ -206,7 +240,7 @@ def run():
             'paperless_billing': paperless_billing, 
             'payment_method': payment_method, 
             'monthly_charges': monthly_charges, 
-            'total_charges': int(total_charges), 
+            'total_charges': total_charges, 
             'monthly_charges_cat': charges_cat, 
             'tenure_year': tenure_year
             }

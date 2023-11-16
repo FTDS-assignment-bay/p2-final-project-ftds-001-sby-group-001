@@ -5,6 +5,7 @@ The telecommunications industry, being highly competitive, faces challenges in r
 
 ## Project Overview
 The primary goal of this project is to analyze and understand the factors contributing to customer churn in a Telco company, enabling data-driven strategies to reduce churn rates and enhance customer retention.
+
 ## Tools and Technologies
 - Python
 - Jupyter Notebook

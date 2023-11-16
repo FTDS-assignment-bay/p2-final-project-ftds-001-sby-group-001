@@ -6,7 +6,7 @@ import plotly.express as px
 from PIL import Image
 
 def run():
-    #Show dataframe
+    # Show dataframe
     # st.title('Data Overview')
     df = pd.read_csv('telco_data_clean.csv')
     # st.dataframe(df.head())
@@ -14,76 +14,77 @@ def run():
     st.title('Exploratory Data Analysis')
     plot_selection = st.selectbox(label='Choose', 
                                   options=['Customer Distribution', 
-                                           'Top Total Churn City',
-                                           'Customers reasons for churning', 
-                                           'Churn Reason', 
-                                           'Age Distribution Churn vs Stayed',  
-                                           'Gender Distribution Churn vs Stayed'])
+                                           'Churn by Monthly Charge',
+                                           'Churn by Tenure', 
+                                           'Churn by Internet Service'])
     
     # Plot 1
     def plot_1():
         st.write('#### Pie Chart for Customer Status Distribution')
-        # fig_1 = plt.figure()
-        # customer_status_count = df['Customer Status'].value_counts()
-        # fig_1, ax = plt.subplots()
-        # ax.pie(customer_status_count, labels=customer_status_count.index, autopct='%1.1f%%')
-        # ax.set_title('Customer Status Distribution')
-        # st.pyplot(fig_1)
-        # with st.expander('Explanation'):
-        #     st.text('''
-        #         The data frame indicates that 26.5% of customers have churned. 
-        #         The "Joined" Category row will be removed, as it doesn't offer 
-        #         any useful insights into the churn rate.
-        #     ''')
-        st.text('''
-                The data frame indicates that 26.5% of customers have churned. 
-                The "Joined" Category row will be removed, as it doesn't offer 
-                any useful insights into the churn rate.
+        target = df["churn"].value_counts().reset_index()
+        persen = df["churn"].value_counts(normalize=True).reset_index()
+        target["percentage"] = persen["churn"]
+        
+        fig_1 = plt.figure()
+        fig_1, ax = plt.subplots(ncols=1, figsize=(5, 5))
+        ax.pie(target["percentage"], labels = target["index"], autopct='%.0f%%')
+        ax.set_title("Customer Status Distribution")
+        st.pyplot(fig_1)
+        st.write('''
+                From the plot above, it is found that of the total number of customers who churn 
+                is 27% (1869 customers) and customers who is not churn / stay is 73% (5163 customers).
+                ''')
+        st.markdown('---')
+    
+    # Plot 2
+    def plot_2():
+        df_churn_by_mcharges = df.groupby(['monthly_charges_cat']).agg(total=('monthly_charges_cat', 'count')).sort_values(by=['total'], ascending=True)
+        fig_2 = plt.figure(figsize=(7, 5))
+        ax = sns.barplot(data=df_churn_by_mcharges, x=df_churn_by_mcharges.index.to_list(), y='total', orient='v')
+        ax.bar_label(ax.containers[0])
+        ax.set(title='Churn by Monthly Charges')
+        st.pyplot(fig_2)
+        st.write('''
+                 From the bar plot above we can see that Medium-High Expenses and High Expense 
+                 have the highest churn rate.
+                 ''')
+        st.markdown('---')
 
-                Sisa ne nyusul
-            ''')
+    # Plot 3
+    def plot_3():
+        df_churn_by_mcharge = df.groupby(['tenure_year', 'churn']).agg(total=('churn', 'count'))
+        fig_3 = plt.figure(figsize=(7, 5))
+        ax = sns.lineplot(data=df_churn_by_mcharge, x="tenure_year", y="total", hue="churn")
+        # ax.bar_label(ax.containers[0])
+        ax.set(title='Churn by Monthly Charges')
+        st.pyplot(fig_3)
+        st.write('''
+                 From the bar plot above we can see that as tenure increases, the churn rate tends 
+                 to decrease. Customers with a longer usage period tend to be more loyal.
+                 ''')
+        st.markdown('---')
+    
+    # Plot 4
+    def plot_4():
+        fig_4 = plt.figure(figsize=(7, 5))
+        ax = sns.countplot(data=df, x='internet_service', hue='churn')
+        ax.bar_label(ax.containers[0])
+        ax.bar_label(ax.containers[1])
+        ax.set(title='Churn by Internet Service')
+        st.pyplot(fig_4)
+        st.write('There are more customers with Fiber Optic services who churn (1297) than DSL customers who churn (459). The ratio of churn to total customers appears to be higher for customers with Fiber Optic services (41.9%) compared to DSL customers (19.0%).')
+        st.write('The solution that needs to be done is to evaluate and update Fiber Optic services to improve quality and customer satisfaction, such as focusing on improving speed, stability and ease of use. In addition, there needs to be an adjustment to the marketing strategy to emphasize the advantages and benefits of Fiber Optic services that can meet customer needs by identifying market segments that are more likely to be interested in this service.')
+        st.markdown('---')
 
-    # st.write('## Histogram Limit Balance')
-    # fig = plt.figure(figsize=(15,5))
-    # sns.histplot(df['limit_balance'], bins=20, kde=True).set(title='limit_balance')
-    # st.pyplot(fig)
-    # st.write('Based on histogram, column _limit\_balance_ skewness is positive, meaning the data distribution is not normal.')
-    # st.markdown('---')
-
-    # st.write('## Average Amount of Bill Statement')
-    # df_amt = pd.DataFrame()
-    # bill_amt = []
-    # pay_amt = []
-    # for i in range(1, 7):
-    #     bill_amt.append(df['bill_amt_' + str(i)].mean())
-    #     pay_amt.append(df['pay_amt_' + str(i)].mean())
-    # df_amt['bill_amt'] = bill_amt
-    # df_amt['pay_amt'] = pay_amt
-    # fig, ax = plt.subplots(ncols=2, figsize=(10, 5))
-    # axis_label = sns.barplot(ax=ax[0], data=df_amt, x=df_amt['bill_amt'].index, y=bill_amt, orient='v')
-    # ax[0].set_title('Bill Statement')
-    # axis_label = sns.barplot(ax=ax[1], data=df_amt, x=df_amt['pay_amt'].index, y=pay_amt, orient='v')
-    # ax[1].set_title('Payment')
-    # st.pyplot(fig)
-    # st.write('Average amount of bill statement is decrease every month, showing people using their credit card less during this period.')
-    # st.markdown('---')
-
-    # st.write('## Barplot Sex')
-    # fig = plt.figure(figsize=(10,5))
-    # sns.countplot(x='sex', data=df)
-    # st.pyplot(fig)
-    # st.write('Most of the bank customer is female')
-    # st.markdown('---')
-
-    # st.write('## Barplot Marital Status')
-    # fig = plt.figure(figsize=(15,5))
-    # sns.countplot(x='marital_status', data=df)
-    # st.pyplot(fig)
-    # st.write('Most of the bank customer is married')
-    # st.markdown('---')
 
     if plot_selection == "Customer Distribution":
         plot_1()
+    elif plot_selection == "Churn by Monthly Charge":
+        plot_2()
+    elif plot_selection == "Churn by Tenure":
+        plot_3()
+    elif plot_selection == "Churn by Internet Service":
+        plot_4()
 
 if __name__ == '__main__':
     run()
