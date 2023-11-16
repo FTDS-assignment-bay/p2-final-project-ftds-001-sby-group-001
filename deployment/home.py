@@ -9,7 +9,8 @@ def run():
 
     st.write('## Background :')
     st.markdown('''
-                Telco tambahono rek .....
+                The telecommunications industry, being highly competitive, faces challenges in retaining customers. 
+                Churn or customer attrition, is a critical metric that directly impacts the revenue and growth of a Telco company.
                 ''')
 
     st.write('## Project Objective :')
