@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import pickle
 import os
+import matplotlib.pyplot as plt
+import seaborn as sns
 import json
 
 def run():
@@ -32,6 +34,8 @@ def run():
 
     # Create Function for Prediction
     def predictData(df):
+        totalCustomer = len(df)
+
         # Classification prediction
         y_pred_uploaded = classification_model.predict(df)
         df['churn'] = y_pred_uploaded
@@ -72,7 +76,7 @@ def run():
             df_cluster_1 = df_churn[df_churn['cluster'] == 1]
             df_cluster_2 = df_churn[df_churn['cluster'] == 2]
 
-            st.write(f'## Result : `{churnCustomer} customer` are predicted as churn!')
+            st.write(f'## Result : `{churnCustomer} customer` ({int((churnCustomer/totalCustomer)*100)}%) are predicted as churn!')
             st.write('##### Here are some suggestion to minimalize churn potential for each customer depend on their cluster')
             c0, c1, c2 = '', '', ''
             for x in df_cluster_0['name']: c0 += str(x) + ', '
@@ -134,6 +138,22 @@ def run():
                 st.write('Suggestion for `', c2[0:-2], '` is')
                 st.write(suggestion_2)
                 st.markdown('---')
+            
+            # Create Bar Plot for Analyze Cluster
+            num_agg_df = df_churn.groupby(['cluster']).agg({'tenure': 'mean', 'monthly_charges': 'mean'})
+            num_agg_df = np.round(num_agg_df, decimals=2)
+            fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(9, 5))
+
+            # Loop through each subplot to populate it
+            for ax, column in zip(axes, num_agg_df.columns):
+                sns.barplot(ax=ax, data=num_agg_df, x=num_agg_df.index, y=column, orient='v')
+                ax.set_title(f'Average {column} by Cluster')
+                ax.set_xlabel('Cluster')
+                ax.set_ylabel(f'Average {column}')
+                ax.bar_label(ax.containers[0])
+            
+            plt.tight_layout()
+            st.pyplot(fig)
     
     def tenureMonthToYear():
         year = st.session_state.tenurem % 12
@@ -157,7 +177,7 @@ def run():
     if inputType == "Upload Excel or CSV File":
         with open('telco_data_test.xlsx', 'rb') as file:
             st.download_button(
-                label='💾 Download Template Excel',
+                label='💾 Download Example Excel',
                 data=file,
                 file_name='telco_example.xlsx',
                 mime='application/vnd.ms-excel'
@@ -177,7 +197,7 @@ def run():
             predictData(df)
     # B. For Manual        
     else:
-    # Create Form
+        # Create Form
         # with st.form(key='Form Parameters'):
         name = st.text_input('Name', value='', help='Customer Name')
 
