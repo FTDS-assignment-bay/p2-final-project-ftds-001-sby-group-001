@@ -2,10 +2,10 @@ import streamlit as st
 
 def run():
     st.write('## Our Team :')
-    st.write('##### :adult: [Gilang Wiradhyaksa](https://github.com/gilangwd)')
-    st.write('##### :adult: [Stephanus Adinata Susanto](https://github.com/StephanusAdinata)')
-    st.write('##### :adult: [Samuel Christian Soendjojo](https://github.com/samchriss94)')
-    st.write('##### :adult: [Joshua Osaze Kurniawan](https://github.com/JoshuaOsazeKurniawan)')
+    st.write('##### :adult: [Gilang Wiradhyaksa](https://www.linkedin.com/in/gilangwiradhyaksa/) | [GitHub](https://github.com/gilangwd)')
+    st.write('##### :adult: [Stephanus Adinata Susanto](https://www.linkedin.com/in/stephanus-adinata-susanto-1b115b170/) | [GitHub](https://github.com/StephanusAdinata)')
+    st.write('##### :adult: [Samuel Christian Soendjojo](https://www.linkedin.com/in/samchriss94/) | [GitHub](https://github.com/samchriss94)')
+    st.write('##### :adult: [Joshua Osaze Kurniawan](https://www.linkedin.com/in/joshua-osaze-kurniawan-45560228a/) | [GitHub](https://github.com/JoshuaOsazeKurniawan)')
 
     st.write('## Background :')
     st.markdown('''

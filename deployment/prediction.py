@@ -10,6 +10,7 @@ import json
 def run():
     # Load Model Classification
     with open('adaboost_logreg_best.pkl', 'rb') as file_1:
+    # with open('adaboost_logreg_10_features.pkl', 'rb') as file_1:
         classification_model = pickle.load(file_1)
     
     # Load Model Clustering
@@ -36,124 +37,145 @@ def run():
     def predictData(df):
         totalCustomer = len(df)
 
-        # Classification prediction
-        y_pred_uploaded = classification_model.predict(df)
-        df['churn'] = y_pred_uploaded
-        # st.dataframe(df)
-
-        # Filter the DataFrame for Predicted Churn (1) 
-        df_churn = df[df['churn'] == 1]
-        
-        churnCustomer = len(df_churn)
-
-        if churnCustomer == 0:
-            st.write('## There is no Customer predicted as Churn from this Data!')
+        if totalCustomer < 1:
+            st.write('## There is no Customer on this data, please check again.')
         else:
-            # Clustering prediction for Predicted Churn (1)
-            ## Split Numerical and Categorical for K-Prototype
-            data_cluster_num = df_churn[num_col]
-            data_cluster_cat = df_churn[cat_col]
+            # Classification prediction
+            y_pred_uploaded = classification_model.predict(df)
+            df['churn'] = y_pred_uploaded
+            # st.dataframe(df)
 
-            ## Scale Numerical column
-            num_scaled = scaler.transform(data_cluster_num)
-
-            ## Merge Scaled Numerical + Categorical
-            data_cluster_final = np.concatenate([num_scaled, data_cluster_cat], axis=1)
-            data_cluster_final = pd.DataFrame(data_cluster_final, columns=['tenure', 'monthly_charges'] + cat_col)
-            data_cluster_final = data_cluster_final.infer_objects()
-
-            ## Mark Categorical Column
-            index_cat_columns = [data_cluster_final.columns.get_loc(col) for col in cat_col] 
-
-            ## Predict Cluster
-            y_cluster = clustering_model.predict(data_cluster_final, categorical=index_cat_columns)
-            # y_cluster = []
-            #for rd in range(0, len(df_churn)): y_cluster.append(random.randint(0, 2)) # Random Generator for testing
-            df_churn['cluster'] = y_cluster
+            # Filter the DataFrame for Predicted Churn (1) 
+            df_churn = df[df['churn'] == 1]
             
-            # Split Data into 3 Cluster DataFrames
-            df_cluster_0 = df_churn[df_churn['cluster'] == 0]
-            df_cluster_1 = df_churn[df_churn['cluster'] == 1]
-            df_cluster_2 = df_churn[df_churn['cluster'] == 2]
+            churnCustomer = len(df_churn)
 
-            st.write(f'## Result : `{churnCustomer} customer` ({int((churnCustomer/totalCustomer)*100)}%) are predicted as churn!')
-            st.write('##### Here are some suggestion to minimalize churn potential for each customer depend on their cluster')
-            c0, c1, c2 = '', '', ''
-            for x in df_cluster_0['name']: c0 += str(x) + ', '
-            for y in df_cluster_1['name']: c1 += str(y) + ', '
-            for z in df_cluster_2['name']: c2 += str(z) + ', '
-            
-            cluster_0 = '''
-                - Most of them are senior citizen
-                - Having partner and dependents
-                - High monthly charges
-            '''
+            if churnCustomer == 0:
+                st.write('## There is no Customer predicted as Churn from this Data!')
+            else:
+                # Clustering prediction for Predicted Churn (1)
+                ## Split Numerical and Categorical for K-Prototype
+                data_cluster_num = df_churn[num_col]
+                data_cluster_cat = df_churn[cat_col]
 
-            suggestion_0 = '''
-                - Offers packages with additional speed for 3 months for those who have subscribed for more than 3 years
-                - Open all TV channels during big holiday events such as Eid, Christmas and others
-                - Provide special offers to increase internet speed to them
-            '''
+                ## Scale Numerical column
+                num_scaled = scaler.transform(data_cluster_num)
 
-            cluster_1 = '''
-                - Mix of senior citizan and youngster
-                - Having partner and dependents
-                - Low monthly charges
-            '''
+                ## Merge Scaled Numerical + Categorical
+                data_cluster_final = np.concatenate([num_scaled, data_cluster_cat], axis=1)
+                data_cluster_final = pd.DataFrame(data_cluster_final, columns=['tenure', 'monthly_charges'] + cat_col)
+                data_cluster_final = data_cluster_final.infer_objects()
 
-            suggestion_1 = '''
-                - Provides offers with many benefits if they subscribe for the long term
-                - Offers annual DSL internet packages at affordable prices
-            '''
+                ## Mark Categorical Column
+                index_cat_columns = [data_cluster_final.columns.get_loc(col) for col in cat_col] 
 
-            cluster_2 = '''
-                - Most of them are young people
-                - Most of them have no partner and dependents
-                - Moderate monthly charges
-            '''
+                ## Predict Cluster
+                y_cluster = clustering_model.predict(data_cluster_final, categorical=index_cat_columns)
+                # y_cluster = []
+                #for rd in range(0, len(df_churn)): y_cluster.append(random.randint(0, 2)) # Random Generator for testing
+                df_churn['cluster'] = y_cluster
 
-            suggestion_2 = '''
-                Providing special packages with the following criteria:
-                 - High speed internet but lower bandwidth at a cheaper price than normal packages
-                 - Low speed internet but large bandwidth so the connection is much more stable at a cheaper price than normal packages
-            '''
+                temp_cols = df_churn.columns.tolist()
+                new_cols = temp_cols[0:1] + temp_cols[-2:] + temp_cols[1:-2]
+                df_churn = df_churn[new_cols]
+                df_churn = df_churn.sort_values(by=['cluster'], ascending=True)
 
-            if c0 != '':
-                st.write('##### Cluster 1')
-                st.write(cluster_0)
-                st.write('Suggestion for `', c0[0:-2], '` is')
-                st.write(suggestion_0)
-                st.markdown('---')
-            
-            if c1 != '':
-                st.write('##### Cluster 2')
-                st.write(cluster_1)
-                st.write('Suggestion for `', c1[0:-2], '` is')
-                st.write(suggestion_1)
-                st.markdown('---')
-            
-            if c2 != '':
-                st.write('##### Cluster 3')
-                st.write(cluster_2)
-                st.write('Suggestion for `', c2[0:-2], '` is')
-                st.write(suggestion_2)
-                st.markdown('---')
-            
-            # Create Bar Plot for Analyze Cluster
-            num_agg_df = df_churn.groupby(['cluster']).agg({'tenure': 'mean', 'monthly_charges': 'mean'})
-            num_agg_df = np.round(num_agg_df, decimals=2)
-            fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(9, 5))
+                # Saving Result to Excel
+                df_churn.to_excel('model_result.xlsx', index=False)
+                
+                # Split Data into 3 Cluster DataFrames
+                df_cluster_0 = df_churn[df_churn['cluster'] == 0]
+                df_cluster_1 = df_churn[df_churn['cluster'] == 1]
+                df_cluster_2 = df_churn[df_churn['cluster'] == 2]
 
-            # Loop through each subplot to populate it
-            for ax, column in zip(axes, num_agg_df.columns):
-                sns.barplot(ax=ax, data=num_agg_df, x=num_agg_df.index, y=column, orient='v')
-                ax.set_title(f'Average {column} by Cluster')
-                ax.set_xlabel('Cluster')
-                ax.set_ylabel(f'Average {column}')
-                ax.bar_label(ax.containers[0])
-            
-            plt.tight_layout()
-            st.pyplot(fig)
+                st.write(f'## Result : `{churnCustomer} customer` from total {totalCustomer} customer ({int((churnCustomer/totalCustomer)*100)}%) are predicted as churn!')
+                st.write('##### Here are some suggestion to minimalize churn potential for each customer depend on their cluster')
+                c0, c1, c2 = '', '', ''
+                for x in df_cluster_0['name']: c0 += str(x) + ', '
+                for y in df_cluster_1['name']: c1 += str(y) + ', '
+                for z in df_cluster_2['name']: c2 += str(z) + ', '
+                
+                cluster_0 = '''
+                    - Most of them are senior citizen
+                    - Having partner and dependents
+                    - High monthly charges
+                '''
+
+                suggestion_0 = '''
+                    - Offers packages with additional speed for 3 months for those who have subscribed for more than 3 years
+                    - Open all TV channels during big holiday events such as Eid, Christmas and others
+                    - Provide special offers to increase internet speed to them
+                '''
+
+                cluster_1 = '''
+                    - Mix of senior citizan and youngster
+                    - Having partner and dependents
+                    - Low monthly charges
+                '''
+
+                suggestion_1 = '''
+                    - Provides offers with many benefits if they subscribe for the long term
+                    - Offers annual DSL internet packages at affordable prices
+                '''
+
+                cluster_2 = '''
+                    - Most of them are young people
+                    - Most of them have no partner and dependents
+                    - Moderate monthly charges
+                '''
+
+                suggestion_2 = '''
+                    Providing special packages with the following criteria:
+                    - High speed internet but lower bandwidth at a cheaper price than normal packages
+                    - Low speed internet but large bandwidth so the connection is much more stable at a cheaper price than normal packages
+                '''
+
+                if c0 != '':
+                    st.write(f'##### Cluster 1 - Elder Group - {len(df_cluster_0)} customer ({((len(df_cluster_0)/churnCustomer)*100):.1f}%)')
+                    st.write(cluster_0)
+                    st.write('Suggestion for `', c0[0:-2], '` is')
+                    st.write(suggestion_0)
+                    st.markdown('---')
+                
+                if c1 != '':
+                    st.write(f'##### Cluster 2 - Mixuage - {len(df_cluster_1)} customer ({((len(df_cluster_1)/churnCustomer)*100):.1f}%)')
+                    st.write(cluster_1)
+                    st.write('Suggestion for `', c1[0:-2], '` is')
+                    st.write(suggestion_1)
+                    st.markdown('---')
+                
+                if c2 != '':
+                    st.write(f'##### Cluster 3 - Young Blood - {len(df_cluster_2)} customer ({((len(df_cluster_2)/churnCustomer)*100):.1f}%)')
+                    st.write(cluster_2)
+                    st.write('Suggestion for `', c2[0:-2], '` is')
+                    st.write(suggestion_2)
+                    st.markdown('---')
+                
+                # Create Bar Plot for Analyze Cluster
+                num_agg_df = df_churn.groupby(['cluster']).agg({'tenure': 'mean', 'monthly_charges': 'mean'})
+                num_agg_df = np.round(num_agg_df, decimals=2)
+                fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(9, 5))
+
+                # Loop through each subplot to populate it
+                for ax, column in zip(axes, num_agg_df.columns):
+                    sns.barplot(ax=ax, data=num_agg_df, x=num_agg_df.index, y=column, orient='v')
+                    ax.set_title(f'Average {column} by Cluster')
+                    ax.set_xlabel('Cluster')
+                    ax.set_ylabel(f'Average {column}')
+                    ax.bar_label(ax.containers[0])
+                
+                # plt.style.use('dark_background')
+                plt.tight_layout()
+                st.pyplot(fig)
+                # plt.style.use('default')
+
+                with open('model_result.xlsx', 'rb') as file:
+                    st.download_button(
+                        label='💾 Download Prediction Result',
+                        data=file,
+                        file_name='model_result.xlsx',
+                        mime='application/vnd.ms-excel'
+                )
     
     def tenureMonthToYear():
         year = st.session_state.tenurem % 12
@@ -175,11 +197,20 @@ def run():
 
     # A. For CSV
     if inputType == "Upload Excel or CSV File":
+        dl_1, dl_2, dl_3 = st.columns([3, 3, 3])
         with open('telco_data_test.xlsx', 'rb') as file:
-            st.download_button(
-                label='💾 Download Example Excel',
+            dl_1.download_button(
+                label='💾 Download Data Example',
                 data=file,
                 file_name='telco_example.xlsx',
+                mime='application/vnd.ms-excel'
+            )
+        
+        with open('telco_data_template.xlsx', 'rb') as file:
+            dl_2.download_button(
+                label='💾 Download Template Excel',
+                data=file,
+                file_name='telco_template.xlsx',
                 mime='application/vnd.ms-excel'
             )
 
