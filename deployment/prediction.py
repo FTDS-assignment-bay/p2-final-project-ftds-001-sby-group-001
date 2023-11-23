@@ -101,10 +101,15 @@ def run():
                     - High monthly charges
                 '''
 
+                # suggestion_0 = '''
+                #     - Offers packages with additional speed for 3 months for those who have subscribed for more than 3 years
+                #     - Open all TV channels during big holiday events such as Eid, Christmas and others
+                #     - Provide special offers to increase internet speed to them
+                # '''
                 suggestion_0 = '''
-                    - Offers packages with additional speed for 3 months for those who have subscribed for more than 3 years
-                    - Open all TV channels during big holiday events such as Eid, Christmas and others
-                    - Provide special offers to increase internet speed to them
+                    - Offers long term packages
+                    - Give limited time offer
+                    - Maintain good communication with this customer
                 '''
 
                 cluster_1 = '''
@@ -116,6 +121,7 @@ def run():
                 suggestion_1 = '''
                     - Provides offers with many benefits if they subscribe for the long term
                     - Offers annual DSL internet packages at affordable prices
+                    - New customer onboarding and orientation
                 '''
 
                 cluster_2 = '''
@@ -124,10 +130,14 @@ def run():
                     - Moderate monthly charges
                 '''
 
+                # suggestion_2 = '''
+                #     Providing special packages with the following criteria:
+                #     - High speed internet but lower bandwidth at a cheaper price than normal packages
+                #     - Low speed internet but large bandwidth so the connection is much more stable at a cheaper price than normal packages
+                # '''
                 suggestion_2 = '''
-                    Providing special packages with the following criteria:
-                    - High speed internet but lower bandwidth at a cheaper price than normal packages
-                    - Low speed internet but large bandwidth so the connection is much more stable at a cheaper price than normal packages
+                    - Make an affordable internet package prices for this cluster
+                    - Provides Variation in Payment Method
                 '''
 
                 if c0 != '':
@@ -138,7 +148,7 @@ def run():
                     st.markdown('---')
                 
                 if c1 != '':
-                    st.write(f'##### Cluster 2 - Mixuage - {len(df_cluster_1)} customer ({((len(df_cluster_1)/churnCustomer)*100):.1f}%)')
+                    st.write(f'##### Cluster 2 - Mixage - {len(df_cluster_1)} customer ({((len(df_cluster_1)/churnCustomer)*100):.1f}%)')
                     st.write(cluster_1)
                     st.write('Suggestion for `', c1[0:-2], '` is')
                     st.write(suggestion_1)
