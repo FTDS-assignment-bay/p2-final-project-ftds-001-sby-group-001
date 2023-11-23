@@ -41,8 +41,12 @@ st.set_page_config(
 # st.title('Telco Customer Churn and Segmentation')
 # image = Image.open('images\logo_crop_clean.png')
 # image = Image.open('images\logo_grey_clean.png')
+col1, col2, col3 = st.columns([10, 1, 5])
 image_url = 'https://raw.githubusercontent.com/FTDS-assignment-bay/p2-final-project-ftds-001-sby-group-001/main/images/logo_crop_clean.png'
-st.image(image_url, width=500)
+qr_url = 'https://raw.githubusercontent.com/FTDS-assignment-bay/p2-final-project-ftds-001-sby-group-001/main/images/qr_link.png'
+col1.image(image_url, width=450)
+col2.write('')
+col3.image(qr_url, width=150)
 st.write('# Customer Churn and Segmentation')
 st.subheader('Predict churn and retain your customer!')
 st.markdown('---')

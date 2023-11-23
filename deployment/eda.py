@@ -13,7 +13,7 @@ def run():
 
     st.title('Exploratory Data Analysis')
     plot_selection = st.selectbox(label='Choose', 
-                                  options=['Customer Distribution', 
+                                  options=['Customer Demographic', 
                                            'Churn by Monthly Charge',
                                            'Churn by Tenure', 
                                            'Churn by Internet Service'])
@@ -22,16 +22,20 @@ def run():
     def plot_1():
         st.write('#### Pie Chart for Customer Status Distribution')
         target = df.groupby(['churn']).agg(total_churn=('churn', 'count'))
+        gender = df.groupby(['gender']).agg(total_gender=('gender', 'count'))
         target['percentage'] = (target['total_churn'] / target['total_churn'].sum())
-        
-        fig_1 = plt.figure()
-        fig_1, ax = plt.subplots(ncols=1, figsize=(5, 5))
-        ax.pie(target["percentage"], labels=target["percentage"].index, autopct='%.0f%%')
-        ax.set_title("Customer Status Distribution")
+
+        fig_1, ax = plt.subplots(nrows=1, ncols=2, figsize=(10, 5))
+        ax[0].pie(target["total_churn"], labels=target["total_churn"].index, autopct='%.0f%%')
+        ax[0].set_title("Churn and No-Churn")
+        ax[1].pie(gender["total_gender"], labels=gender["total_gender"].index, autopct='%.1f%%')
+        ax[1].set_title("Customer Gender")
+
         st.pyplot(fig_1)
         st.write('''
                 From the plot above, it is found that of the total number of customers who churn 
                 is 27% (1869 customers) and customers who is not churn / stay is 73% (5163 customers).
+                From all the customer 50.5% is male and 49.5% is female.
                 ''')
         st.markdown('---')
     
@@ -76,7 +80,7 @@ def run():
         st.markdown('---')
 
 
-    if plot_selection == "Customer Distribution":
+    if plot_selection == "Customer Demographic":
         plot_1()
     elif plot_selection == "Churn by Monthly Charge":
         plot_2()
