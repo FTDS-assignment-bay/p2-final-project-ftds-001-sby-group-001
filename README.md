@@ -35,6 +35,7 @@ Telco Customer Churn and Segmentation project aims to predict whether customers 
 ## Exploratory Data Analysis
 <!-- --- -->
 ![EDA Title 01](./images/graph.png)
+Based on the EDA we found several column that have high correlation with customer churn. This column is Senior Citizen, Having Dependents, Tenure, Monthly Charge, Payment Method and Internet Service. Next we will use this column to create a classification model.
 
 ## Result
 ### Classification Result
