@@ -137,7 +137,7 @@ def run():
                 # '''
                 suggestion_2 = '''
                     - Make an affordable internet package prices for this cluster
-                    - Provides Variation in Payment Method
+                    - Provides variation in Payment Method
                 '''
 
                 if c0 != '':
