@@ -50,11 +50,25 @@ From the classification result, we do customer segmentation using `K-means` algo
 From all three segment show similarities in having a short average tenure, indicating a trend for customers to end service relatively quickly. Fiber optic internet service was a common factor among the clusters, indicating that this service may have issues that lead to customer dissatisfaction.
 
 ## Suggestion
-- Always improve service quality and maintain open communication with customers.
+### For Elder Group
+- Offers long term packages
+- Give limited time offer
+- Maintain good communication with this customer
+
+### For Mixage
+- Provides offers with many benefits if they subscribe for the long term
+- Offers annual DSL internet packages at affordable prices
+- New customer onboarding and orientation
+
+### For Young Blood
+- Make an affordable internet package prices for this cluster
+- Provides variation in Payment Method
+
+<!-- - Always improve service quality and maintain open communication with customers.
 - Consider a loyalty program or incentives for loyal customers.
 - Monitor and respond to customer feedback regularly.
 - Adjust marketing strategies and offers based on the characteristics of each cluster.
-- Strengthen customer service to provide effective and responsive support.
+- Strengthen customer service to provide effective and responsive support. -->
 
 ## Acknowledgements
 The Telco Transaction data used in this project was obtained from [Kaggle](https://www.kaggle.com/datasets/blastchar/telco-customer-churn/)
