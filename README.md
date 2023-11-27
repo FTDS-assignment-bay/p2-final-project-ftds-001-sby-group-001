@@ -50,17 +50,17 @@ From the classification result, we do customer segmentation using `K-means` algo
 From all three segment show similarities in having a short average tenure, indicating a trend for customers to end service relatively quickly. Fiber optic internet service was a common factor among the clusters, indicating that this service may have issues that lead to customer dissatisfaction.
 
 ## Suggestion
-### For Elder Group
+### Elder Group
 - Offers long term packages
 - Give limited time offer
 - Maintain good communication with this customer
 
-### For Mixage
+### Mixage
 - Provides offers with many benefits if they subscribe for the long term
 - Offers annual DSL internet packages at affordable prices
 - New customer onboarding and orientation
 
-### For Young Blood
+### Young Blood
 - Make an affordable internet package prices for this cluster
 - Provides variation in Payment Method
 
