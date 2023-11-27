@@ -34,13 +34,15 @@ Telco Customer Churn and Segmentation project aims to predict whether customers 
 - `deplyment_url.txt` : Text file containing link to our application.
 
 ## Exploratory Data Analysis
----
+<!-- --- -->
 ![EDA Title 01](./images/graph.png)
 
 ## Result
+### Classification Result
 ![Classification Result](./images/classification_result.png)
 We use several algorithm for this project and above are the best result we got. We use `AdaBoost` algorithm to boosting `LogisticRegression` algorithm, then we do hyper parameter tuning for this `AdaBoost` and got the best result. To analyze this model, we use `precision` metrics because we want to maximize the model to correctly predict churn customer. As a result we got 79.5% precision score on train-set and 82.8% on test-set and this result can be called `goodfit`.
 
+### Clustering Result
 ![Clustering Result](./images/clustering_result.png)
 From the classification result, we do customer segmentation using `K-means` algorithm and above are the result. We successfully create three segment for churn customer. Each segment has their own characteristic. Then based on this characteristic, we give few suggestion for marketing team to provide offers to these customers to retain them.
 
